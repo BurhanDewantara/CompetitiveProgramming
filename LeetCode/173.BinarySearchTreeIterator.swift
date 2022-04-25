@@ -27,7 +27,7 @@ class BSTIterator {
     init(_ root: TreeNode?) {
         self.root = root
         self.nums = [] 
-        nums = iterate(root)
+        nums = inorderTraversal(root)
     }
     
     func next() -> Int {
@@ -38,11 +38,11 @@ class BSTIterator {
         return nums.count > 0
     }
 
-    private func iterate(_ node: TreeNode?) -> [Int] {
+    private func inorderTraversal(_ node: TreeNode?) -> [Int] {
         //base case 
         guard let node = node else { return [] }
 
-        return iterate(node.left) + [node.val] + iterate(node.right)
+        return inorderTraversal(node.left) + [node.val] + inorderTraversal(node.right)
     }
 }
 
