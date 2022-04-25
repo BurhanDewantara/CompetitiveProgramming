@@ -1,71 +1,73 @@
-class TreeNode: Equatable {
-    public var val: Int
-    public var left: TreeNode?
-    public var right: TreeNode?
-    public init(_ val: Int, _ left: TreeNode? = nil, _ right: TreeNode? = nil) {
+class TreeNode {
+    var val: Int
+    var left: TreeNode?
+    var right: TreeNode?
+    init(_ val: Int, _ left: TreeNode? = nil, _ right: TreeNode? = nil) {
         self.val = val
         self.left = left
         self.right = right
     }
 
-    static func == (_ lhs: TreeNode, _ rhs: TreeNode) -> Bool {
-        return lhs.val == rhs.val &&
-        lhs.left == rhs.left &&
-        lhs.right == rhs.right
-    }
+    static func create(_ array: [Int?], _ root: TreeNode?, _ index: Int = 0) -> TreeNode? {
+        // base case 
+        guard index < array.count, let val = array[index] else { return root }
 
-    static func bfsPrint(_ node: TreeNode?) {
-        guard let node = node else { return }
-        var queue: [TreeNode] = []
-        queue.append(node)
-
-        while !queue.isEmpty {
-            let topNode = queue.removeFirst()
-            print(topNode.val)
-
-            if let leftNode = topNode.left {
-                queue.append(leftNode)
-            }
-            if let rightNode = topNode.right {
-                queue.append(rightNode)
-            }
-        }
+        // general case
+        let newNode = TreeNode(val)
+        newNode.left = TreeNode.create(array, newNode.left, 2 * index + 1)
+        newNode.right = TreeNode.create(array, newNode.right, 2 * index + 2)
+        return newNode
     }
 }
 
 class BSTIterator {
     var root: TreeNode?
+    var nums: [Int] 
+    
     init(_ root: TreeNode?) {
         self.root = root
+        self.nums = [] 
+        nums = iterate(root)
     }
     
     func next() -> Int {
-        //basebase 
-        if root.next == nil {
-            root = root.next
-        }
+        return nums.removeFirst()
     }
     
     func hasNext() -> Bool {
-        
+        return nums.count > 0
+    }
+
+    private func iterate(_ node: TreeNode?) -> [Int] {
+        //base case 
+        guard let node = node else { return [] }
+
+        return iterate(node.left) + [node.val] + iterate(node.right)
     }
 }
 
+/*
+            7
+    3               15
+                9       20
+*/
 
-let node = TreeNode(
-     7,
-    TreeNode(50, 
-        TreeNode(25, 
-            TreeNode(1)), 
-        TreeNode(75, 
-            TreeNode(35, 
-                TreeNode(30)))),
-    TreeNode(150, 
-        TreeNode(125), 
-        TreeNode(175))
-  )
+let nums = [7, 3, 15, nil, nil, 9, 20]
+var root: TreeNode?
+root = TreeNode.create(nums, root)
+let bstIterator = BSTIterator(root)
 
 
-let bstIterator = BSTIterator(node)
+let result: [Any] = [
+    bstIterator.next(),         // 3
+    bstIterator.next(),         // 7
+    bstIterator.hasNext(),      // true
+    bstIterator.next(),         // 9
+    bstIterator.hasNext(),      // true
+    bstIterator.next(),         // 15
+    bstIterator.hasNext(),      // true
+    bstIterator.next(),         // 20
+    bstIterator.hasNext(),      // false
+]
 
-
+print (result)
