@@ -1,24 +1,13 @@
 class TreeNode: Equatable {
-    var val: Int
-    var left: TreeNode?
-    var right: TreeNode?
-    init(_ val: Int, _ left: TreeNode? = nil, _ right: TreeNode? = nil) {
+    public var val: Int
+    public var left: TreeNode?
+    public var right: TreeNode?
+    public init(_ val: Int, _ left: TreeNode? = nil, _ right: TreeNode? = nil) {
         self.val = val
         self.left = left
         self.right = right
     }
 
-    static func create(_ array: [Int?], _ root: TreeNode?, _ index: Int = 0) -> TreeNode? {
-        // base case 
-        guard index < array.count, let val = array[index] else { return root }
-
-        // general case
-        let newNode = TreeNode(val)
-        newNode.left = TreeNode.create(array, newNode.left, 2 * index + 1)
-        newNode.right = TreeNode.create(array, newNode.right, 2 * index + 2)
-        return newNode
-    }
-    
     static func == (_ lhs: TreeNode, _ rhs: TreeNode) -> Bool {
         return lhs.val == rhs.val &&
         lhs.left == rhs.left &&
@@ -44,8 +33,39 @@ class TreeNode: Equatable {
     }
 }
 
-var root: TreeNode? = nil
+class BSTIterator {
+    var root: TreeNode?
+    init(_ root: TreeNode?) {
+        self.root = root
+    }
+    
+    func next() -> Int {
+        //basebase 
+        if root.next == nil {
+            root = root.next
+        }
+    }
+    
+    func hasNext() -> Bool {
+        
+    }
+}
 
-root = TreeNode.create([1,2,3,4,5], root)
 
-TreeNode.bfsPrint(root)
+let node = TreeNode(
+     7,
+    TreeNode(50, 
+        TreeNode(25, 
+            TreeNode(1)), 
+        TreeNode(75, 
+            TreeNode(35, 
+                TreeNode(30)))),
+    TreeNode(150, 
+        TreeNode(125), 
+        TreeNode(175))
+  )
+
+
+let bstIterator = BSTIterator(node)
+
+
