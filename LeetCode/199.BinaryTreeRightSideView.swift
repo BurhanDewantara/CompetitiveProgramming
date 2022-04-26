@@ -44,6 +44,32 @@ class TreeNode: Equatable {
     }
 }
 
+class Solution {
+    //BFS
+    func rightSideView(_ root: TreeNode?) -> [Int] {
+        guard let root = root else { return [] }
+        var stack: [TreeNode] = [root]
+        var result: [[Int]] = []
+
+        while !stack.isEmpty {
+            var levelStack: [TreeNode] = []
+            var values: [Int] = []
+
+            for currentNode in stack {
+                if let left = currentNode.left { levelStack.append(left) }
+                if let right = currentNode.right { levelStack.append(right) }
+                values.append(currentNode.val)
+            }
+            result.append(values)
+            stack = levelStack
+        }
+        return result.reduce([], { (current, next) -> [Int] in
+            guard let lastItem = next.last else { return [] }
+            return current + [lastItem]
+        })
+    }
+}
+
 
 /*
             1
@@ -51,8 +77,17 @@ class TreeNode: Equatable {
 4     5                
 */
 
-var root: TreeNode? = nil
 
-root = TreeNode.create([1,2,3,4,5], root)
+let rootNodes = [
+    [1,2,nil,nil,5],        //-> 1,2,5
+    [1,2,3,nil,5],          //-> 1,3,5
+    [1,2,3,nil,5,nil,4],    //-> 1,3,4
+]
 
-TreeNode.bfsPrint(root)
+for rootNode in rootNodes {
+    var root: TreeNode? = nil
+    root = TreeNode.create(rootNode, root)
+    let result = Solution().rightSideView(root)
+    print (result)
+}
+
