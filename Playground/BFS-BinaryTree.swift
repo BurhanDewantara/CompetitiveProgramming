@@ -42,7 +42,6 @@ func bfs(_ node: TreeNode?) -> [Int] {
     var queue: [TreeNode] = []
     queue.append(node)
     
-
     while !queue.isEmpty {
         let topNode = queue.removeFirst()
         vals.append(topNode.val)
